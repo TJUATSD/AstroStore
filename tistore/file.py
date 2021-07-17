@@ -1,6 +1,5 @@
 import csv
 import re
-import tistore
 from .db import RetionalDB, NoRetionalDB
 
 
@@ -12,10 +11,10 @@ class CsvData:
         self.timedata = []
     
     def metadata(self) -> dict:
-        self.metadata
+        return self.metadata
 
     def timedata(self) -> list:
-        self.timedata
+        return self.timedata
     
     def open(self):
         filename = self.file
