@@ -1,0 +1,14 @@
+{
+    "retional": {
+        "user": "test",
+        "pwd": "test",
+        "host": "127.0.0.1",
+        "db": "test"
+    },
+    "noretional": {
+        "user": "test",
+        "pwd": "test",
+        "host": "127.0.0.1",
+        "db": "test"
+    }
+}
