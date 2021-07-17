@@ -1,5 +1,6 @@
 import csv
 import re
+import tistore
 from .db import RetionalDB, NoRetionalDB
 
 
@@ -77,4 +78,6 @@ class MultCsv:
     
     async def call(self):
         for index in range(len(self.csvs)):
-            await self.read(index)
+            meta, timedata = await self.read(index)
+            await self.store_meta(table=self.retional_db['table'], meta=meta)
+            await self.store_time(table=self.retional_db[index]['table'], data=timedata)
