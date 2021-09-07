@@ -16,7 +16,7 @@ import influxdb
 哈希index -> 时序数据表名
 时序数据表名 -> 时序数据
 """
-class DB:
+class InfluxDB:
     def __init__(self):
         self.host = ""
         self.port = 0
