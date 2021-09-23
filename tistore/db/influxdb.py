@@ -36,3 +36,6 @@ class InfluxDB:
 
     def create(self, name: str):
         self.client.create_database(name)
+
+    async def write_data(self, data: str):
+        self.client.write_points(data)

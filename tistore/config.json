@@ -4,5 +4,12 @@
         "pwd": "test",
         "host": "127.0.0.1",
         "db": "test"
+    },
+
+    "mysqldb": {
+        "user": "test",
+        "pwd": "test",
+        "hist": "127.0.0.1",
+        "db": "test"
     }
 }
