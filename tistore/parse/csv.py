@@ -5,7 +5,7 @@ sys.path.append("..")
 # from .db import RetionalDB, NoRetionalDB
 
 
-class ParseFile:
+class ParseCSV:
     def __init__(self, file):
         self.file = file
         self.metadata = {}
@@ -45,6 +45,10 @@ class ParseFile:
                         data_dict[self.data_key[index]] = value
                     self.timedata.append(data_dict)
                 cnt += 1
+    
+    def debug(self):
+        print(self.metadata)
+        print(self.timedata)
 
 
 class ParseFiles:
@@ -53,7 +57,7 @@ class ParseFiles:
         self.config = config
         self.csvs = []
         for file in self.files:
-            self.csvs.append(ParseFile(file))
+            self.csvs.append(ParseCSV(file))
 
     async def read(self, index: int):
         csvdata = self.csvs[index]

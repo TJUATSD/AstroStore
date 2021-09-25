@@ -6,3 +6,6 @@ class MysqlDB:
         self.port = 0
         self.username = ""
         self.password = ""
+
+    def write_csv_data(self, meta_data):
+        pass
