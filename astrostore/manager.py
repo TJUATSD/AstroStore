@@ -1,8 +1,8 @@
 import sys
 from typing import List
-from tistore.parse.csv import ParseCSV
-from tistore.db.influxdb import InfluxDB
-from tistore.db.mysqldb import MysqlDB
+from astrostore.parse.csv import ParseCSV
+from astrostore.db.influxdb import InfluxDB
+from astrostore.db.mysqldb import MysqlDB
 sys.path.append("..")
 
 """
@@ -22,6 +22,7 @@ class Manager:
         file = parse.open()
         data = parse.read(file)
         parse.parse(data)
+        parse.debug()
         return parse
 
     def hash(self, metadata):
