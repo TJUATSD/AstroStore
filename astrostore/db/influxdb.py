@@ -37,5 +37,5 @@ class InfluxDB:
     def create(self, name: str):
         self.client.create_database(name)
 
-    def write_csv_data(self, data: str):
+    def write_csv_data(self, table: str, data: str):
         pass

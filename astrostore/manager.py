@@ -17,6 +17,9 @@ class Manager:
         self.MetaDB = MetaDB
         self.TimeDBs = TimeDBs
 
+    """
+    解析 CSV 数据的格式
+    """
     def parse_csv(self, filename):
         parse = ParseCSV(filename)
         file = parse.open()
@@ -25,7 +28,16 @@ class Manager:
         parse.debug()
         return parse
 
-    def hash(self, metadata):
+    """
+    通过hash算法获取表名
+    """
+    def __hash(self, metadata):
+        return ""
+
+    """
+    通过表名获取到时序数据库的索引
+    """
+    def __get_timedb(self, hash):
         return 0
 
     """
@@ -36,9 +48,14 @@ class Manager:
         parse_csv = self.parse_csv(file)
         meta_data = parse_csv.metadata()
         time_data = parse_csv.timedata()
-        hash = self.hash(meta_data)
+        # 这里通过 hash 获取表名
+        table = self.__hash(meta_data)
+        # 通过表名获取对应的时序数据库(这里表现为索引，其中索引应为持久化的，应当存储于数据库或者磁盘中)
+        index = self.__get_timedb(table)
+        # 元数据数据库的表名应当是唯一的
         self.MetaDB.write_csv_data(meta_data)
-        self.TimeDBs[hash].write_csv_data(time_data)
+        # 根据表名和时序数据写入数据库中
+        self.TimeDBs[index].write_csv_data(table, time_data)
 
 
     """

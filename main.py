@@ -3,7 +3,7 @@ from astrostore.manager import Manager
 import asyncio
 
 def main():
-    filename = "./testcases/62000006.csv"
+    filename = "./testdata/62000006.csv"
     manager = Manager()
     manager.parse_csv(filename)
 
