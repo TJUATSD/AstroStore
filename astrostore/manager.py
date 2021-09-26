@@ -1,6 +1,6 @@
 import sys
 from typing import List
-from astrostore.parse.csv import ParseCSV
+from astrostore.parser.csv import CSVParser
 from astrostore.db.influxdb import InfluxDB
 from astrostore.db.mysqldb import MysqlDB
 sys.path.append("..")
@@ -21,12 +21,10 @@ class Manager:
     解析 CSV 数据的格式
     """
     def parse_csv(self, filename):
-        parse = ParseCSV(filename)
-        file = parse.open()
-        data = parse.read(file)
-        parse.parse(data)
-        parse.debug()
-        return parse
+        parser = CSVParser(filename)
+        parser.parse()
+        parser.debug()
+        return parser
 
     """
     通过hash算法获取表名
@@ -43,7 +41,7 @@ class Manager:
     """
     获取输入的文件并解析导入对应的数据库中
     """
-    def import_csv(self, file: str):
+    def __import_csv(self, file: str):
         # 解析 CSV 文件，获取元数据和时序数据
         parse_csv = self.parse_csv(file)
         meta_data = parse_csv.metadata()
@@ -63,4 +61,11 @@ class Manager:
     """
     async def import_csvs(self, files: list):
         for file in files:
-            await self.import_csv(file)
+            await self.__import_csv(file)
+
+
+    """
+    查询信息，根据给定的格式进行查询
+    """
+    async def search(self, info: dict):
+        pass
