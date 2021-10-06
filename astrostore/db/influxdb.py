@@ -2,7 +2,7 @@ import influxdb
 import sys
 import json
 sys.path.append("..")
-from astrostore.parse.csv import ParseCSV
+from astrostore.parser.csv import CSVParser
 
 """
 使用 influxDB 来存储时序数据，想法是根据星体所在经纬度局部性去创建表，

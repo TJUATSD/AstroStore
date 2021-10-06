@@ -1,15 +1,13 @@
 from astrostore.manager import Manager
-from astrostore.parse.csv import ParseCSV
+from astrostore.parser.csv import CSVParser
 from astrostore.db.influxdb import InfluxDB
-import asyncio
+# import asyncio
 
 def main():
     filename = "./testdata/62000006.csv"
-    parse1 = ParseCSV(filename)
-    file = parse1.open()
-    data = parse1.read(file)
-    parse1.parse(data)
-    t1 = parse1.timedata()
+    parse1 = CSVParser(filename)
+    parse1.parse()
+    t1 = parse1.get_timedata()
     influxdb = InfluxDB()
     influxdb.write_csv_data("test", t1)
 
