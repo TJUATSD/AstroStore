@@ -1,6 +1,10 @@
 import influxdb
 import sys
 import json
+import datetime
+
+import requests
+
 sys.path.append("..")
 from astrostore.parser.csv import CSVParser
 
@@ -22,10 +26,10 @@ from astrostore.parser.csv import CSVParser
 """
 class InfluxDB:
     def __init__(self):
-        self.host = ""
-        self.port = 0
-        self.username = ""
-        self.password = ""
+        self.host = "127.0.0.1"
+        self.port = 8086
+        self.username = "TEST"
+        self.password = "TEST"
 
     def connect(self):
         client = influxdb.InfluxDBClient(
@@ -33,15 +37,16 @@ class InfluxDB:
             port=self.port, 
             username=self.username, 
             password=self.password,
-            ssl=True,
-            verify_ssl=True
+            ssl=False,
+            verify_ssl=False
         )
         self.client = client
+        print("connect successfully")
 
     def create(self, name: str):
         self.client.create_database(name)
 
-    def dict_slice(adict, start, end):
+    def dict_slice(self, adict, start, end):
         keys = adict.keys()
         dict_slice = {}
         for k in list(keys)[start:end]:
@@ -49,16 +54,19 @@ class InfluxDB:
         return dict_slice
 
 
-    def write_csv_data(self, table: str, tdata: str):
+    def write_csv_data(self, table: str, tdata: list):
+        datas = []
         for oneline in tdata:
             article_info = {}
             data = json.loads(json.dumps(article_info))
-            data['measurement'] = 'table'
-            data['DATATIME'] = oneline['DATATIME']
+            data['measurement'] = 'test'
+            data['DATETIME'] = oneline['DATETIME']
             article2 = self.dict_slice(oneline, 1, len(oneline))
-            fields = json.loads(json.dumps(article2))
-            data['fields'] = fields
-            
+            print(article2)
+            data['fields'] = article2
+            datas.append(data)
+        print(datas)
 
-            self.client.write_points(data)
-            print("success")
+        self.create(table)
+        self.client.write_points(datas, database=table)
+        print("success")
