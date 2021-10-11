@@ -11,10 +11,10 @@ class CSVParser:
         self.metadata = {}
         self.timedata = []
     
-    def metadata(self) -> dict:
+    def get_metadata(self) -> dict:
         return self.metadata
 
-    def timedata(self) -> list:
+    def get_timedata(self) -> list:
         return self.timedata
     
     def __open(self):
