@@ -31,7 +31,7 @@ class Manager:
     通过hash算法获取表名
     """
     def __hash(self, metadata):
-        return ""
+        return metadata["FIELD"]
 
     """
     通过表名获取到时序数据库的索引
