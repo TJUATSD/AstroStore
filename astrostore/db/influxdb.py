@@ -1,9 +1,10 @@
-import influxdb
+from logging import FATAL
+import influxdb_client
+from influxdb_client.client.write.point import Point
+from influxdb_client.client.write_api import ASYNCHRONOUS
 import sys
 import json
-import datetime
 
-import requests
 
 sys.path.append("..")
 from astrostore.parser.csv import CSVParser
@@ -25,23 +26,19 @@ from astrostore.parser.csv import CSVParser
 时序数据表名 -> 时序数据
 """
 class InfluxDB:
-    def __init__(self):
-        self.host = "127.0.0.1"
-        self.port = 8086
-        self.username = "TEST"
-        self.password = "TEST"
+    def __init__(self, url, token, org):
+        self.url = url 
+        self.token = token 
+        self.org = org
 
     def connect(self):
-        client = influxdb.InfluxDBClient(
-            host=self.host,
-            port=self.port, 
-            username=self.username, 
-            password=self.password,
-            ssl=False,
-            verify_ssl=False
+        client = influxdb_client.InfluxDBClient(
+            url = self.url,
+            token = self.token,
+            org = self.org
         )
         self.client = client
-        print("connect successfully")
+        print("[Debug] 连接成功")
 
     def create(self, name: str):
         self.client.create_database(name)
@@ -65,8 +62,33 @@ class InfluxDB:
             print(article2)
             data['fields'] = article2
             datas.append(data)
-        print(datas)
+        # with open("data.json", 'w') as f:
+        #     json.dump(datas, f, ensure_ascii=False, indent=4)
 
-        self.create(table)
-        self.client.write_points(datas, database=table)
-        print("success")
+        # self.create(table)
+        write_data = []
+        for data in datas:
+            point = Point(data["measurement"])\
+                .field("MJD", data["fields"]["MJD"])\
+                .field("X", data["fields"]["X"])\
+                .field("Y", data["fields"]["Y"])\
+                .field("RA", data["fields"]["RA"])\
+                .field("DEC", data["fields"]["DEC"])\
+                .field("FLUX", data["fields"]["FLUX"])\
+                .field("FLUX_ERR", data["fields"]["FLUX_ERR"])\
+                .field("MAG_AUTO", data["fields"]["MAG_AUTO"])\
+                .field("MAGERR_AUTO", data["fields"]["MAGERR_AUTO"])\
+                .field("BACKGROUND", data["fields"]["BACKGROUND"])\
+                .field("FWHM", data["fields"]["FWHM"])\
+                .field("A", data["fields"]["A"])\
+                .field("B", data["fields"]["B"])\
+                .field("THETA", data["fields"]["THETA"])\
+                .field("FLAGS", data["fields"]["FLAGS"])\
+                .field("R50", data["fields"]["R50"])\
+                .field("MAG", data["fields"]["MAG"])\
+                .field("MAGERR", data["fields"]["MAGERR"])\
+                .time(data["DATETIME"])
+            write_data.append(point)
+
+        write_api = self.client.write_api(ASYNCHRONOUS)
+        write_api.write(bucket="kuangjux", record=write_data)

@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 import sys
 from typing import List
 from astrostore.parser.csv import CSVParser
