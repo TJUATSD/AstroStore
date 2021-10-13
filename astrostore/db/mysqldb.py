@@ -16,5 +16,13 @@ class MysqlDB:
             , meta_data["OBJID"], meta_data["OBJECT"], meta_data["RA"], meta_data["DEC"]\
             , meta_data["MAG"], meta_data["CREATED"])
 
+    def search_server(self, field):
+        sql = "SELECT `server` FROM `map` WHERE `field` = %s"
+        self.cursor.execute(sql, field)
+
+    def write_server(self, field, server):
+        sql = "INSERT INTO `map` (`field`, `server`) VALUES(%s, %s)"
+        self.cursor.execute(sql, field, server)
+
     def close(self):
         self.db.cursor.close()

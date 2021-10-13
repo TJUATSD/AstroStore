@@ -12,11 +12,16 @@ sys.path.append("..")
 class Manager:
     """
     初始化：管理者需要接受一个 MysqlDB 对象作为存储元数据的数据库；
-    接受多个 InfluxDB 对象作为存储时序数据的集群
     """
-    def __init__(self, MetaDB: MysqlDB, TimeDBs: List[InfluxDB]):
+    def __init__(self, MetaDB: MysqlDB):
         self.MetaDB = MetaDB
-        self.TimeDBs = TimeDBs
+        self.__init_manager()
+
+    """
+    Manager从MysqlDB中读入读入服务器集群的信息并做初始化
+    """
+    def __init_manager(self):
+        pass
 
     """
     解析 CSV 数据的格式
@@ -36,8 +41,9 @@ class Manager:
     """
     通过表名获取到时序数据库的索引
     """
-    def __get_timedb(self, hash):
-        return 0
+    def __get_timedb(self, table):
+        server_id = self.MetaDB.search_server(table)
+        return server_id
 
     """
     获取输入的文件并解析导入对应的数据库中
@@ -50,11 +56,11 @@ class Manager:
         # 这里通过 hash 获取表名
         table = self.__hash(meta_data)
         # 通过表名获取对应的时序数据库(这里表现为索引，其中索引应为持久化的，应当存储于数据库或者磁盘中)
-        index = self.__get_timedb(table)
+        server_id = self.__get_timedb(table)
         # 元数据数据库的表名应当是唯一的
         self.MetaDB.write_csv_data(meta_data)
         # 根据表名和时序数据写入数据库中
-        self.TimeDBs[index].write_csv_data(table, time_data)
+        self.TimeDBs[server_id].write_csv_data(table, time_data)
 
 
     """
