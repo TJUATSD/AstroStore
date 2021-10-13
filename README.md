@@ -11,6 +11,10 @@ A idea to try store astronomical time series data in influxDB.
 ### 数据库模块(db)
 主要负责数据库的管理与存储的实现   
 
+**数据库表的设计**
+![](image/表设计1.png)   
+![](image/表设计2.png)
+
 
 ### 解析器模块(parse)
 主要负责文件的解析与生成
