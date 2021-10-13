@@ -4,6 +4,7 @@ from typing import List
 from astrostore.parser.csv import CSVParser
 from astrostore.db.influxdb import InfluxDB
 from astrostore.db.mysqldb import MysqlDB
+import json
 sys.path.append("..")
 
 """
@@ -13,15 +14,24 @@ class Manager:
     """
     初始化：管理者需要接受一个 MysqlDB 对象作为存储元数据的数据库；
     """
-    def __init__(self, MetaDB: MysqlDB):
-        self.MetaDB = MetaDB
-        self.__init_manager()
+    def __init__(self, config):
+        self.__init_manager(config)
 
     """
     Manager从MysqlDB中读入读入服务器集群的信息并做初始化
     """
-    def __init_manager(self):
-        pass
+    def __init_manager(self, config):
+        self.InfluxDBs = []
+        with open(config, "r") as f:
+            data = json.load(f)
+            mysqldb = data["mysqldb"]
+            influxdbs = data["influxdbs"]
+            self.MetaDB = MysqlDB(mysqldb["host"], mysqldb["username"],\
+                mysqldb["password"], mysqldb["db"])
+            for influxdb in influxdbs:
+                self.InfluxDBs.append(InfluxDB(influxdb["url"],\
+                    influxdb["token"], influxdb["org"]))
+
 
     """
     解析 CSV 数据的格式

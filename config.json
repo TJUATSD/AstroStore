@@ -1,0 +1,23 @@
+{
+    "mysqldb": {
+        "host": "",
+        "username": "",
+        "password": "",
+        "db": ""
+    },
+    
+    "influxdbs": [
+        {
+            "url": "1",
+            "token": "1",
+            "org": "1",
+            "bucket": "1"
+        },
+        {
+            "url": "2",
+            "token": "2",
+            "org": "2",
+            "bucket": "2"
+        }
+    ]
+}
